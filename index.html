@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradeToken - Turn Marks into Rewards</title>
+    <title>EduPlay - Turn Marks into Rewards</title>
     <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -39,9 +40,376 @@
             50% { transform: translateY(-10px); }
         }
         .float-animation { animation: float 3s ease-in-out infinite; }
+              margin-bottom: 60px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+         .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tokens {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
+         .rewards {
+            margin: 80px 0;
+        }
+
+        .rewards h2 {
+            text-align: center;
+            font-size: 3rem;
+             margin-bottom: 60px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .reward-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .reward-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .reward-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .reward-content {
+            padding: 30px;
+        }
+
+        .reward-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .reward-cost {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 15px;
+        }
+
+        .locked {
+            opacity: 0.5;
+        }
+
+        .locked::after {
+            content: "🔒 Locked";
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Performance Input */
+        .performance-section {
+            background: rgba(255,255,255,0.95);
+            padding: 60px;
+            border-radius: 20px;
+            margin: 80px 0;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .performance-section h2{
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            max-width: 400px;
+            margin: 0 auto 30px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5rem;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            color: #333;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .earn-btn {
+            background: linear-gradient(45deg, #51cf66, #40c057);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(81, 207, 102, 0.4);
+        }
+
+        .earn-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(81, 207, 102, 0.6);
+        }
+
+        .tokens-earned {
+            font-size: 2rem;
+            color: #51cf66;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .problem-solution {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .quiz-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            margin-left: 350px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .question {
+            margin-bottom: 30px;
+        }
+
+        .question h3 {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            color: #333;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8f0fe;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .next-btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 10px;
+        }
+
+        .next-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            background: #48bb78;
+            color: white;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+        }
+
+        .submit-btn:hover {
+            background: #38a169;
+        }
+
+        .result {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .perfect { color: #48bb78; }
+        .good { color: #ed8936; }
+        .needs-work { color: #f56565; }
+
+        .restart-btn {
+            background: #667eea;
+            color: white;
+            margin-top: 20px;
+            padding: 10px 10px;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #667eea;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 480px) {
+            .quiz-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+        .border-t{
+            background-color: black;
+        }
+        /* Popup background */
+
+          .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 600px;
+
+        }
+        .logo { font-size: 32px; font-weight: 800; background: linear-gradient(45deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .wallet-status { display: flex; align-items: center; gap: 10px; padding: 10px 20px; background: #0ea5e9; border-radius: 50px; border: 2px solid #0ea5e9; }
+        
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        
+       
+
+
+
     </style>
 </head>
 <body class="font-inter bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white overflow-x-hidden">
+       
     
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 glass px-6 py-4">
@@ -56,7 +424,7 @@
             </div>
             <div class="hidden md:flex items-center space-x-8">
                 <a href="#home" class="hover:text-blue-400 transition-all duration-300">Home</a>
-                <a href="#Login" class="hover:text-blue-400 transition-all duration-300">Login</a>
+                <a href="loginEdu.html" class="hover:text-blue-400 transition-all duration-300">Login</a>
                 <a href="#dashboard" class="hover:text-blue-400 transition-all duration-300">Dashboard</a>
                 <a href="#store" class="hover:text-blue-400 transition-all duration-300">Store</a>
                 <a href="#badges" class="hover:text-blue-400 transition-all duration-300">Badges</a>
@@ -64,8 +432,25 @@
             <div class="flex items-center space-x-4">
                 <button id="connectWallet" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium flex items-center space-x-2">
                     <i class="fas fa-wallet"></i>
-                    <span id="walletStatus">Connect Wallet</span>
+                    <button onclick="connectWallet()">Connect Wallet</button>
+<p id="walletAddress"></p>
+<script>async function connectWallet() {
+  if (window.ethereum) {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    document.getElementById("walletAddress").innerText =
+      "Connected: " + accounts[0];
+  } else {
+    alert("Install MetaMask!");
+  }
+}</script>
                 </button>
+                 <div class="user-info">
+                    <div class="tokens">
+                        <i class="fas fa-coins"></i> <span id="tokenCount">1250</span> Tokens
+                    </div>
+                </div>
                 <button class="md:hidden p-2">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
@@ -77,7 +462,7 @@
     <section id="home" class="pt-24 pb-20 px-6">
         <div class="max-w-7xl mx-auto text-center">
             <div class="float-animation mb-8">
-                <img src="Images/Token.avif" alt="GradeToken" class="mx-auto w-32 h-32 rounded-2xl shadow-2xl token-glow">
+                <img src="Coin.png" alt="GradeToken" class="mx-auto w-32 h-32 rounded-2xl shadow-2xl token-glow">
             </div>
             <h1 class="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent mb-6 leading-tight">
                 Turn Your <span class="text-blue-400">Marks</span><br>
@@ -172,6 +557,29 @@
             </div>
         </div>
     </section>
+
+    <!--Content area-->
+
+     <section id="dashboard" class="px-6 py-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-6">
+                    EduPlay Education Content
+                </h2>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    There are multiple courses availabe at our platform.
+                </p>
+                    <div class="container">
+                     <div class="header">
+                        <!--course1-->
+            <div class="logo">🐍 EduPlay Python</div>
+            <div class="wallet-status" id="walletStatus">
+                <span id="walletInfo">Connect Wallet</span>
+            </div>
+            </div
+        </div>
+        
+   
 
     <!-- Store Section -->
     <section id="store" class="px-6 py-20 bg-slate-800/30">
@@ -279,11 +687,11 @@
                     <i class="fas fa-graduation-cap text-white"></i>
                 </div>
                 <span class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                    GradeToken
+                    EduPlay
                 </span>
             </div>
             <p class="text-slate-500 mb-8 max-w-md mx-auto">
-                Revolutionizing education rewards. Built for the future of learning.
+               "We are not changing the marks - we are changing how students feel about them."
             </p>
             <div class="flex flex-wrap justify-center gap-6 text-slate-400">
                 <a href="#" class="hover:text-blue-400

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPlay - Turn Marks into Rewards</title>
+    <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .token-glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        .badge-glow {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.6);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-animation { animation: float 3s ease-in-out infinite; }
+
+        /* 3D Coin Styles */
+        .coin-container {
+            perspective: 1000px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coin {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: coinRotate 8s infinite linear;
+        }
+
+        .coin-face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .coin-front {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            border: 8px solid #f4c430;
+            box-shadow: 
+                0 20px 40px rgba(255, 215, 0, 0.4),
+                inset 0 4px 8px rgba(255,255,255,0.6),
+                inset 0 -4px 8px rgba(0,0,0,0.2);
+        }
+
+        .coin-back {
+            background: linear-gradient(145deg, #ffed4e, #ffd700);
+            border: 8px solid #f4c430;
+            box-shadow: 
+                0 -20px 40px rgba(255, 215, 0, 0.4),
+                inset 0 4px 8px rgba(255,255,255,0.6),
+                inset 0 -4px 8px rgba(0,0,0,0.2);
+            transform: rotateY(180deg);
+        }
+
+        @keyframes coinRotate {
+            0% { transform: rotateY(0deg) rotateX(0deg); }
+            100% { transform: rotateY(360deg) rotateX(360deg); }
+        }
+
+        .coin-glow {
+            box-shadow: 
+                0 0 50px rgba(255, 215, 0, 0.8),
+                0 0 100px rgba(255, 215, 0, 0.4),
+                inset 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        .coin-sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+
+        .sparkle-1 { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle-2 { top: 60%; right: 20%; animation-delay: 0.5s; }
+        .sparkle-3 { bottom: 30%; left: 60%; animation-delay: 1s; }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Coin Cards Layout */
+        .coin-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin: 80px 0;
+        }
+
+        .coin-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .coin-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.15),
+                0 0 0 1px rgba(255,255,255,0.3);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255,215,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .coin-card:hover {
+            transform: translateY(-12px) rotateX(5deg);
+            box-shadow: 
+                0 30px 80px rgba(0,0,0,0.25),
+                0 0 0 1px rgba(255,255,255,0.5);
+        }
+
+        .coin-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .coin-card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 12px 32px rgba(255,215,0,0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .coin-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .coin-container {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .coin-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Rest of your existing styles... */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tokens {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        /* Add all your other existing styles here too */
+        /* ... (keeping all your original styles intact) ... */
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white overflow-x-hidden">
+    
+    <!-- Your existing navigation -->
+    <nav class="fixed top-0 w-full z-50 glass px-6 py-4">
+        <!-- ... your existing nav code ... -->
+    </nav>
+
+    <!-- Your existing sections until dashboard -->
+    <!-- ... -->
+
+    <!-- NEW 3D COIN SECTION - RIGHT AFTER DASHBOARD -->
+    <section class="px-6 py-20" style="margin-top: 80px;">
+        <div class="max-w-7xl mx-auto">
+            <!-- 3D Coin Hero -->
+            <div class="coin-section">
+                <!-- 3D Animated Coin -->
+                <div class="coin-container">
+                    <div class="coin coin-glow relative">
+                        <!-- Sparkles -->
+                        <div class="coin-sparkle sparkle-1"></div>
+                        <div class="coin-sparkle sparkle-2"></div>
+                        <div class="coin-sparkle sparkle-3"></div>
+                        
+                        <!-- Front Face -->
+                        <div class="coin-face coin-front">
+                            <div class="text-4xl">🪙</div>
+                            <div class="text-xs mt-2 font-bold text-black">EDUCOIN</div>
+                        </div>
+                        
+                        <!-- Back Face -->
+                        <div class="coin-face coin-back">
+                            <div class="text-4xl">⭐</div>
+                            <div class="text-xs mt-2 font-bold text-black">1,247</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coin Action Cards -->
+                <div class="coin-cards">
+                    <div class="coin-card">
+                        <div class="coin-card-icon">📊</div>
+                        <h3 class="text-2xl font-bold mb-4 text-center text-gray-800">Check Balance</h3>
+                        <p class="text-gray-600 mb-6 text-center">See your current EduCoin balance and monthly progress</p>
+                        <div class="text-3xl font-bold text-yellow-500 mb-4 text-center">1,247.50</div>
+                        <button class="w-full py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl font-semibold hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg">
+                            View Details →
+                        </button>
+                    </div>
+
+                    <div class="coin-card">
+                        <div class="coin-card-icon">⚡</div>
+                        <h3 class="text-2xl font-bold mb-4 text-center text-gray-800">Quick Earn</h3>
+                        <p class="text-gray-600 mb-6 text-center">Enter your latest marks to instantly earn tokens</p>
+                        <div class="text-3xl font-bold text-emerald-500 mb-4 text-center">+50 Coins</div>
+                        <button class="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl font-semibold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 shadow-lg">
+                            Earn Now →
+                        </button>
+                    </div>
+
+                    <div class="coin-card">
+                        <div class="coin-card-icon">🏪</div>
+                        <h3 class="text-2xl font-bold mb-4 text-center text-gray-800">Spend Tokens</h3>
+                        <p class="text-gray-600 mb-6 text-center">Unlock premium courses, ebooks and exclusive badges</p>
+                        <div class="text-3xl font-bold text-purple-500 mb-4 text-center">20+ Items</div>
+                        <button class="w-full py-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl font-semibold hover:from-purple-600 hover:to-purple-700 transition-all duration-300 shadow-lg">
+                            Open Store →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Continue with your existing Store, Badges, etc. sections -->
+    <!-- ... rest of your code ... -->
+
+    <script>
+        // Wallet connection function (your existing code)
+        async function connectWallet() {
+            if (window.ethereum) {
+                const accounts = await window.ethereum.request({
+                    method: "eth_requestAccounts",
+                });
+                document.getElementById("walletAddress").innerText = "Connected: " + accounts[0].slice(0,6) + "..." + accounts[0].slice(-4);
+            } else {
+                alert("Install MetaMask!");
+            }
+        }
+    </script>
+</body>
+</html>

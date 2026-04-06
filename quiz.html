@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Test Your Knowledge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .question {
+            margin-bottom: 30px;
+        }
+
+        .question h3 {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8f0fe;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .next-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            background: #48bb78;
+            color: white;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+        }
+
+        .submit-btn:hover {
+            background: #38a169;
+        }
+
+        .result {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .perfect { color: #48bb78; }
+        .good { color: #ed8936; }
+        .needs-work { color: #f56565; }
+
+        .restart-btn {
+            background: #667eea;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #667eea;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 480px) {
+            .quiz-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>🧠 Quick Knowledge Quiz</h1>
+        
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" data-question="1">
+                <h3>1. What is the capital of France?</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q1" value="a"> Paris
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="b"> London
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="c"> Berlin
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="d"> Madrid
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question" data-question="2">
+                <h3>2. Which planet is known as the Red Planet?</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q2" value="a"> Venus
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="b"> Mars
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="c"> Jupiter
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="d"> Saturn
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question" data-question="3">
+                <h3>3. What is 15 × 4?</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q3" value="a"> 45
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="b"> 60
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="c"> 75
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="d"> 90
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button type="button" class="next-btn" id="nextBtn" style="display: none;">Next Question</button>
+                <button type="submit" class="submit-btn" id="submitBtn" style="display: none;">Get Results</button>
+            </div>
+        </form>
+
+        <div class="result" id="result">
+            <h2 id="resultTitle">Your Results</h2>
+            <div class="score" id="score">0/3</div>
+            <p id="resultMessage"></p>
+            <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+        </div>
+    </div>
+
+    <script>
+        const quizForm = document.getElementById('quizForm');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const result = document.getElementById('result');
+        const progressBar = document.getElementById('progressBar');
+        let currentQuestion = 1;
+        const totalQuestions = 3;
+
+        // Correct answers
+        const correctAnswers = {
+            q1: 'a',
+            q2: 'b',
+            q3: 'b'
+        };
+
+        // Show first question
+        showQuestion(1);
+
+        nextBtn.addEventListener('click', () => {
+            currentQuestion++;
+            if (currentQuestion <= totalQuestions) {
+                showQuestion(currentQuestion);
+            }
+        });
+
+        function showQuestion(questionNum) {
+            // Hide all questions
+            document.querySelectorAll('.question').forEach(q => {
+                q.style.display = 'none';
+            });
+
+            // Show current question
+            document.querySelector(`[data-question="${questionNum}"]`).style.display = 'block';
+            
+            // Update buttons
+            nextBtn.style.display = questionNum < totalQuestions ? 'inline-block' : 'none';
+            submitBtn.style.display = questionNum === totalQuestions ? 'block' : 'none';
+
+            // Update progress
+            const progress = (questionNum / totalQuestions) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        // Option selection styling
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        quizForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            let score = 0;
+            const formData = new FormData(quizForm);
+            
+            for (let i = 1; i <= totalQuestions; i++) {
+                const answer = formData.get(`q${i}`);
+                if (answer === correctAnswers[`q${i}`]) {
+                    score++;
+                }
+            }
+
+            showResults(score);
+        });
+
+        function showResults(score) {
+            quizForm.style.display = 'none';
+            result.style.display = 'block';
+
+            const scoreEl = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultTitle = document.getElementById('resultTitle');
+
+            scoreEl.textContent = `${score}/${totalQuestions}`;
+
+            if (score === 3) {
+                scoreEl.className = 'score perfect';
+                resultMessage.textContent = '🎉 Perfect! You got everything right!';
+                resultTitle.textContent = 'Outstanding!';
+            } else if (score >= 2) {
+                scoreEl.className = 'score good';
+                resultMessage.textContent = 'Great job! Almost perfect!';
+                resultTitle.textContent = 'Well Done!';
+            } else {
+                scoreEl.className = 'score needs-work';
+                resultMessage.textContent = 'Keep studying! You can do better next time!';
+                resultTitle.textContent = 'Try Again!';
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 1;
+            quizForm.reset();
+            quizForm.style.display = 'block';
+            result.style.display = 'none';
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            showQuestion(1);
+        }
+    </script>
+</body>
+</html>
