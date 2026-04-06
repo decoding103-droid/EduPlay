@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPlay – Learn, Earn & Grow</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tokens {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .core-idea {
+            background: rgba(255,255,255,0.2);
+            padding: 20px 40px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            font-size: 1.3rem;
+            font-weight: 300;
+        }
+
+        /* Stats Cards */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .stat-card {
+            display: inline-block;
+            background: rgba(255,255,255,0.95);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        /* Problem & Solution */
+        .problem-solution {
+            display: inline-block;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin: 80px 0;
+        }
+
+        .section {
+            margin-bottom: 10px;
+            margin-left: 100px;
+            background: rgba(255,255,255,0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: inline-block;
+            
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .problem-list, .solution-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .problem-list li, .solution-list li {
+            padding: 15px 0;
+            font-size: 1.2rem;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .problem-list li::before {
+            content: "✗";
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+            color: #ff6b6b;
+        }
+
+        .solution-list li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+            color: #51cf66;
+        }
+
+        /* Rewards Grid */
+        .rewards {
+            margin: 80px 0;
+        }
+
+        .rewards h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 60px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .reward-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .reward-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .reward-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .reward-content {
+            padding: 30px;
+        }
+
+        .reward-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .reward-cost {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 15px;
+        }
+
+        .locked {
+            opacity: 0.5;
+        }
+
+        .locked::after {
+            content: "🔒 Locked";
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Performance Input */
+        .performance-section {
+            background: rgba(255,255,255,0.95);
+            padding: 60px;
+            border-radius: 20px;
+            margin: 80px 0;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            max-width: 400px;
+            margin: 0 auto 30px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5rem;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .earn-btn {
+            background: linear-gradient(45deg, #51cf66, #40c057);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(81, 207, 102, 0.4);
+        }
+
+        .earn-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(81, 207, 102, 0.6);
+        }
+
+        .tokens-earned {
+            font-size: 2rem;
+            color: #51cf66;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .problem-solution {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">EduPlay</div>
+                <div class="user-info">
+                    <div class="tokens">
+                        <i class="fas fa-coins"></i> <span id="tokenCount">1250</span> Tokens
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="core-idea animate">
+                💡 A platform that converts student performance into reward tokens to reduce pressure and make learning engaging.
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="container">
+            <div class="stat-card animate">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-number" id="totalStudents">50K+</div>
+                <div>Students Learning</div>
+            </div>
+            <div class="stat-card animate">
+                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                <div class="stat-number" id="totalRewards">1M+</div>
+                <div>Rewards Unlocked</div>
+            </div>
+            <div class="stat-card animate">
+                <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                <div class="stat-number" id="totalTokens">10M+</div>
+                <div>Tokens Earned</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem & Solution -->
+    <section class="problem-solution">
+        <div class="container">
+            <div class="section animate">
+                <h2>🧠 The Problem</h2>
+                <ul class="problem-list">
+                    <li>Students feel pressure from marks</li>
+                    <li>No reward system for consistent effort</li>
+                    <li>Learning feels stressful, not motivating</li>
+                </ul>
+            </div>
+            <div class="section animate">
+                <h2>✅ Our Solution</h2>
+                <ul class="solution-list">
+                    <li>Convert marks → into tokens (crypto-like points)</li>
+                    <li>Use tokens to unlock ebooks 📚</li>
+                    <li>Access premium content 🎬</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Input -->
+    <section class="performance-section">
+        <div class="container">
+            <h2>📊 Enter Your Marks to Earn Tokens</h2>
+            <div class="input-group">
+                <input type="number" id="marksInput" placeholder="Enter your marks (0-100)" max="100">
+                <button class="earn-btn" onclick="calculateTokens()">
+                    <i class="fas fa-magic"></i> Earn Tokens Now!
+                </button>
+            </div>
+            <div id="tokensEarned" class="tokens-earned" style="display: none;"></div>
+        </div>
+    </section>
+
+    <!-- Rewards -->
+    <section class="rewards">
+        <div class="container">
+            <h2>🎁 Spend Your Tokens</h2>
+            <div class="rewards-grid" id="rewardsGrid">
+                <!-- Rewards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initial token balance
+        let tokenBalance = 1250;
+
+        // Rewards data
+        const rewards = [
+            { id: 1, title: "Python Programming Ebook", cost: 500, icon: "📚", unlocked: true },
+            { id: 2, title: "Web Development Course", cost: 800, icon: "🎬", unlocked: false },
+            { id: 3, title: "Math Mastery Guide", cost: 300, icon: "📖", unlocked: true },
+            { id: 4, title: "AI & ML Basics", cost: 1200, icon: "🤖", unlocked: false },
+            { id: 5, title: "Career Skills Pack", cost: 700, icon: "💼", unlocked: true },
+            { id: 6, title: "Premium Quiz Access", cost: 400, icon: "❓", unlocked: true }
+        ];
+
+        // Calculate tokens from marks (simple formula: marks * 10)
+        function calculateTokens() {
+            const marks = parseInt(document.getElementById('marksInput').value);
+            if (marks && marks >= 0 && marks <= 100) {
+                const tokensEarned = Math.floor(marks * 10);
+                tokenBalance += tokensEarned;
+                
+                document.getElementById('tokensEarned').style.display = 'block';
+                document.getElementById('tokensEarned').innerHTML = 
+                    `+${tokensEarned} Tokens Earned! 🎉`;
+                
+                document.getElementById('tokenCount').textContent = tokenBalance;
+                document.getElementById('marksInput').value = '';
+                
+                // Update rewards availability
+                updateRewards();
+                
+                // Animation
+                document.getElementById('tokensEarned').style.animation = 'none';
+                setTimeout(() => {
+                    document.getElementById('tokensEarned').style.animation = 'fadeInUp 0.5s ease';
+                });
+                
+                setTimeout(() => {
+                    document.getElementById('tokensEarned').style.display = 'none';
+                }, 3000);
+            } else {
+                alert('Please enter valid marks between 0-100');
+            }
+        }
+
+        // Update rewards display
+        function updateRewards() {
+            const rewardsGrid = document.getElementById('rewardsGrid');
+            rewardsGrid.innerHTML = '';
+            
+            rewards.forEach(reward => {
+                const rewardCard = document.createElement('div');
+                rewardCard.className = `reward-card ${reward.unlocked ? '' : 'locked'}`;
+                rewardCard.onclick = () => redeemReward(reward);
+                
+                rewardCard.innerHTML = `
+                    <div class="reward-image">
+                        ${reward.icon}
+                    </div>
+                    <div class="reward-content">
+                        <div class="reward-title">${reward.title}</div>
+                        <div class="reward-cost">${reward.cost} Tokens</div>
+                    </div>
+                `;
+                
+                rewardsGrid.appendChild(rewardCard);
+            });
+        }
+
+        // Redeem reward
+        function redeemReward(reward) {
+            if (reward.unlocked || tokenBalance >= reward.cost) {
+                if (tokenBalance >= reward.cost) {
+                    tokenBalance -= reward.cost;
+                    document.getElementById('tokenCount').textContent = tokenBalance;
+                    alert(`🎉 Congratulations! You unlocked "${reward.title}"!`);
+                    
+                    // Mark as unlocked
+                    reward.unlocked = true;
+                    updateRewards();
+                } else {
+                    alert('Not enough tokens! Keep earning! 💪');
+                }
+            }
+        }
+
+        // Animate elements on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.animate');
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateRewards();
+            window.addEventListener('scroll', animateOnScroll);
+            
+            // Enter key support for marks input
+            document.getElementById('marksInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateTokens();
+                }
+            });
+        });
+
+        // Update stats periodically (demo)
+        setInterval(() => {
+            const stats = ['totalStudents', 'totalRewards', 'totalTokens'];
+            stats.forEach(stat => {
+                const el = document.getElementById(stat);
+                let current = parseInt(el.textContent.replace(/[^0-9]/g, ''));
+                el.textContent = (current + Math.floor(Math.random() * 1000)).toLocaleString() + '+';
+            });
+        }, 10000);
+    </script>
+</body>
+</html>

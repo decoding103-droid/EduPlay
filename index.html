@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeToken - Turn Marks into Rewards</title>
+    <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .token-glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        .badge-glow {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.6);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-animation { animation: float 3s ease-in-out infinite; }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white overflow-x-hidden">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center token-glow">
+                    <i class="fas fa-graduation-cap text-white text-xl"></i>
+                </div>
+                <span class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                    EduPlay
+                </span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="hover:text-blue-400 transition-all duration-300">Home</a>
+                <a href="#Login" class="hover:text-blue-400 transition-all duration-300">Login</a>
+                <a href="#dashboard" class="hover:text-blue-400 transition-all duration-300">Dashboard</a>
+                <a href="#store" class="hover:text-blue-400 transition-all duration-300">Store</a>
+                <a href="#badges" class="hover:text-blue-400 transition-all duration-300">Badges</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="connectWallet" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium flex items-center space-x-2">
+                    <i class="fas fa-wallet"></i>
+                    <span id="walletStatus">Connect Wallet</span>
+                </button>
+                <button class="md:hidden p-2">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-24 pb-20 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="float-animation mb-8">
+                <img src="Images/Token.avif" alt="GradeToken" class="mx-auto w-32 h-32 rounded-2xl shadow-2xl token-glow">
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent mb-6 leading-tight">
+                Turn Your <span class="text-blue-400">Marks</span><br>
+                Into <span class="text-purple-400">Magic Tokens</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-12 leading-relaxed">
+                Convert academic performance into reward tokens. Unlock ebooks, courses, and earn exclusive NFT-style achievement badges.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto">
+                <button class="px-10 py-5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-xl font-semibold hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-2xl token-glow">
+                    <i class="fas fa-rocket mr-2"></i>Launch Dashboard
+                </button>
+                <button class="px-10 py-5 border-2 border-white/30 rounded-2xl text-xl font-semibold hover:bg-white/10 backdrop-blur-sm transition-all duration-300">
+                    <i class="fas fa-play-circle mr-2"></i>Live Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="px-6 py-12">
+        <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="glass p-8 rounded-2xl">
+                <div class="text-4xl font-bold text-blue-400 mb-2">500+</div>
+                <div class="text-slate-400">Students</div>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <div class="text-4xl font-bold text-green-400 mb-2">12K+</div>
+                <div class="text-slate-400">Tokens Earned</div>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <div class="text-4xl font-bold text-purple-400 mb-2">50+</div>
+                <div class="text-slate-400">Badges Minted</div>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <div class="text-4xl font-bold text-orange-400 mb-2">20+</div>
+                <div class="text-slate-400">Rewards</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="px-6 py-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-6">
+                    Your Token Dashboard
+                </h2>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    Track your marks, earn tokens, and spend them on premium content
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Balance Card -->
+                <div class="glass p-8 rounded-3xl col-span-1 md:col-span-1">
+                    <div class="text-center">
+                        <div class="text-5xl font-bold text-blue-400 mb-4 token-glow">1,247.50</div>
+                        <div class="text-2xl font-semibold text-slate-400 mb-2">EduCoin Tokens</div>
+                        <div class="w-full bg-slate-800 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full" style="width: 78%"></div>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2">78% of monthly goal</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="glass p-8 rounded-3xl md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-bolt text-yellow-400 mr-3"></i>
+                        Quick Actions
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button class="p-6 rounded-xl bg-blue-500/20 hover:bg-blue-500/40 transition-all duration-300 border border-blue-500/30">
+                            <i class="fas fa-plus-circle text-2xl text-blue-400 mb-2 block"></i>
+                            <span class="font-medium">Add Marks</span>
+                        </button>
+                        <button class="p-6 rounded-xl bg-green-500/20 hover:bg-green-500/40 transition-all duration-300 border border-green-500/30">
+                            <i class="fas fa-store text-2xl text-green-400 mb-2 block"></i>
+                            <span class="font-medium">Store</span>
+                        </button>
+                        <button class="p-6 rounded-xl bg-purple-500/20 hover:bg-purple-500/40 transition-all duration-300 border border-purple-500/30">
+                            <i class="fas fa-award text-2xl text-purple-400 mb-2 block"></i>
+                            <span class="font-medium">Badges</span>
+                        </button>
+                        <button class="p-6 rounded-xl bg-orange-500/20 hover:bg-orange-500/40 transition-all duration-300 border border-orange-500/30">
+                            <i class="fas fa-history text-2xl text-orange-400 mb-2 block"></i>
+                            <span class="font-medium">History</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Store Section -->
+    <section id="store" class="px-6 py-20 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent mb-6">
+                    Token Store
+                </h2>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    Spend your tokens on premium ebooks, courses, and exclusive content
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-3xl hover:scale-105 transition-all duration-300 group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-all duration-500">
+                        <i class="fas fa-book text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-center">Premium Ebooks</h3>
+                    <div class="text-3xl font-bold text-emerald-400 mb-6 text-center">299 EduCoins</div>
+                    <button class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl font-semibold hover:from-emerald-600 hover:to-teal-700 transition-all duration-300">
+                        Buy Now
+                    </button>
+                </div>
+
+                <div class="glass p-8 rounded-3xl hover:scale-105 transition-all duration-300 group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-all duration-500">
+                        <i class="fas fa-chalkboard-teacher text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-center">Expert Courses</h3>
+                    <div class="text-3xl font-bold text-purple-400 mb-6 text-center">500 EduCoin</div>
+                    <button class="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300">
+                        Buy Now
+                    </button>
+                </div>
+
+                <div class="glass p-8 rounded-3xl hover:scale-105 transition-all duration-300 group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-all duration-500">
+                        <i class="fas fa-crown text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-center">VIP Membership</h3>
+                    <div class="text-3xl font-bold text-orange-400 mb-6 text-center">999 EduCoins</div>
+                    <button class="w-full py-4 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl font-semibold hover:from-orange-600 hover:to-red-700 transition-all duration-300">
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Badges Section -->
+    <section id="badges" class="px-6 py-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent mb-6">
+                    NFT Achievement Badges
+                </h2>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    Collectible proof of your academic excellence. Own your achievements forever!
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="glass p-6 rounded-2xl badge-glow hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <div class="w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl">
+                        🥇
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-center">Top Performer</h4>
+                    <div class="text-xs text-slate-400 text-center">95%+ Average</div>
+                    <div class="text-green-400 font-semibold mt-2 text-center">Minted</div>
+                </div>
+                <div class="glass p-6 rounded-2xl hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl">
+                        📚
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-center">Bookworm</h4>
+                    <div class="text-xs text-slate-400 text-center">10+ Ebooks</div>
+                    <div class="text-gray-500 font-semibold mt-2 text-center">Pending</div>
+                </div>
+                <div class="glass p-6 rounded-2xl hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <div class="w-24 h-24 bg-gradient-to-r from-purple-500 to-violet-600 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl">
+                        🎯
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-center">Perfect Score</h4>
+                    <div class="text-xs text-slate-400 text-center">100/100 Exam</div>
+                    <div class="text-gray-500 font-semibold mt-2 text-center">Pending</div>
+                </div>
+                <div class="glass p-6 rounded-2xl hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <div class="w-24 h-24 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl">
+                        🔥
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-center">Streak Master</h4>
+                    <div class="text-xs text-slate-400 text-center">30 Day Streak</div>
+                    <div class="text-gray-500 font-semibold mt-2 text-center">Pending</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/50 px-6 py-12 mt-24">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="flex items-center justify-center space-x-4 mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center token-glow">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <span class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                    GradeToken
+                </span>
+            </div>
+            <p class="text-slate-500 mb-8 max-w-md mx-auto">
+                Revolutionizing education rewards. Built for the future of learning.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6 text-slate-400">
+                <a href="#" class="hover:text-blue-400
