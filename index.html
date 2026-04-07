@@ -39,9 +39,7 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
-        .float-animation { animation: float 3s ease-in-out infinite; }
-              margin-bottom: 60px;
-            color: white;
+        .float-animation { animation: float 3s ease-in-out infinite; 
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
          .user-info {
@@ -820,9 +818,11 @@ button:hover {
                 <a href="#badges" class="hover:text-blue-400 transition-all duration-300">Badges</a>
             </div>
             <div class="flex items-center space-x-4">
-                <button id="connectWallet" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium flex items-center space-x-2">
-                    <i class="fas fa-wallet"></i>
-                    <button onclick="connectWallet()">Connect Wallet</button>
+               <button onclick="connectWallet()" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium flex items-center space-x-2">
+    <i class="fas fa-wallet"></i>
+    <span>Connect Wallet</span>
+</button>
+
 <p id="walletAddress"></p>
 <script>async function connectWallet() {
   if (window.ethereum) {
@@ -948,53 +948,7 @@ button:hover {
         </div>
     </section>
 
-    <!--Content area-->
 
-     <section id="dashboard" class="px-6 py-20">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20">
-                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-6">
-                    EduPlay Education Content
-                </h2>
-                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
-                    There are multiple courses availabe at our platform.
-                </p>
-                <br>
-                <p class="text-xl text-slate-400 max-w-2xl mx-auto" style="margin-left: -220px;">
-                    RECOMMENDED:
-                </p>
-                    <div class="container">
-                     <div class="header">
-                        <!--course1-->
-            <div class="logo">🐍 EduPlay Python</div>
-            <div class="wallet-status" id="walletStatus">
-                <span class="learn" id="walletInfo"><a href="Learning_platform.HTML">Start and Earn</a></span>
-            </div>
-        </div>
-        </div>
-          <div class="container">
-                     <div class="header">
-                        <!--course1-->
-            <div class="logo">🎨 CSS</div>
-            <div class="wallet-status" id="walletStatus">
-                <span class="learn"id="walletInfo"><a href="Learning_platform.HTML">Start and Earn</a></span>
-            </div>
-        </div>
-        </div>
-          <div class="container">
-                     <div class="header">
-                        <!--course1-->
-            <div class="logo">❤️ JavaScript</div>
-            <div class="wallet-status" id="walletStatus">
-                <span class="learn"id="walletInfo"><a href="Learning_platform.HTML">Start and Earn</a></span>
-            </div>
-        </div>
-        </div>
-         
-        
-
-    <!-- Continue with your existing Store, Badges, etc. sections -->
-    <!-- ... rest of your code ... -->
 
          <section id="dashboard" class="px-6 py-20">
         <div class="max-w-7xl mx-auto">
@@ -1143,10 +1097,11 @@ function openPayment(amount) {
                     <div class="w-20 h-20 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-all duration-500">
                         <i class="fas fa-book text-2xl text-white"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4 text-center">Premium Ebooks</h3>
+                    <h3 class="text-2xl font-bold mb-4 text-center">HTML Prgramming</h3>
                     <div class="text-3xl font-bold text-emerald-400 mb-6 text-center">299 EduCoins</div>
-                    <button class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl font-semibold hover:from-emerald-600 hover:to-teal-700 transition-all duration-300">
-                        Buy Now
+                    <button class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl font-semibold hover:from-emerald-600 hover:to-teal-700 transition-all duration-300"
+                    style="cursor: pointer;">
+                        <a href="Learninplatfrom(1).html">Buy Now</a>
                     </button>
                 </div>
 
