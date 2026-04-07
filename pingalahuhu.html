@@ -1,160 +1,175 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Python Learning Platform</title>
+  <meta charset="UTF-8">
+  <title>Payment UI</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-      margin: 0;
-    }
-    header {
-      background: #1e293b;
-      padding: 15px;
-      text-align: center;
-    }
-    .container {
-      padding: 20px;
-    }
-    .card {
-      background: #1e293b;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 10px;
-    }
-    button {
-      padding: 10px;
-      margin-top: 10px;
-      background: #22c55e;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    input {
-      padding: 10px;
-      margin: 5px 0;
-      width: 100%;
-    }
-    iframe {
-      width: 100%;
-      height: 300px;
-    }
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.buy-btn {
+  padding: 15px 30px;
+  background: purple;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 400px;
+  background: #111;
+  color: white;
+  border-radius: 15px;
+  padding: 20px;
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.modal.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.close {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* Amount buttons */
+.amounts button {
+  margin: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(45deg, purple, violet);
+  color: white;
+  cursor: pointer;
+}
+
+/* Payment screen */
+.payment {
+  display: none;
+  margin-top: 20px;
+  display: flex;
+}
+
+.left {
+  width: 40%;
+  background: purple;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.right {
+  width: 60%;
+  padding: 20px;
+}
+
+/* Slide animation */
+.payment.show {
+  display: flex;
+  animation: slide 0.5s ease;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
   </style>
 </head>
-
 <body>
 
-<header>
-  <h1>🚀 Python Learning Platform</h1>
-  <p id="userDisplay"></p>
-  <p>Tokens: <span id="tokens">0</span> | Progress: <span id="progress">0%</span></p>
-</header>
+<button class="buy-btn" onclick="openModal()">Buy</button>
 
-<div class="container">
+<!-- Overlay -->
+<div class="overlay" id="overlay"></div>
 
-  <!-- LOGIN -->
-  <div class="card" id="loginCard">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Enter your name">
-    <button onclick="login()">Login</button>
+<!-- Modal -->
+<div class="modal" id="modal">
+
+  <span class="close" onclick="closeModal()">✖</span>
+
+  <!-- STEP 1 -->
+  <div class="step1" id="step1">
+    <h2>Support Our Platform ❤️</h2>
+    <p>Help us keep education free for everyone.</p>
+
+    <div class="amounts">
+      <button onclick="openPayment(49)">₹49</button>
+      <button onclick="openPayment(69)">₹69</button>
+      <button onclick="openPayment(99)">₹99</button>
+      <button onclick="openPayment(149)">₹149</button>
+      <button onclick="openPayment(499)">₹499</button>
+      <button onclick="openPayment(999)">₹999</button>
+      <button onclick="openPayment(1999)">₹1999</button>
+    </div>
   </div>
 
-  <!-- COURSE -->
-  <div id="courseSection" style="display:none">
-
-    <!-- VIDEO -->
-    <div class="card">
-      <h2>Python Lecture</h2>
-      <button onclick="showVideo()">Watch Lecture</button>
-      <div id="video"></div>
+  <!-- STEP 2 -->
+  <div class="payment" id="payment">
+    
+    <div class="left">
+      <h3>Price Summary</h3>
+      <h1 id="price">₹69</h1>
+      <p>Using: +91 XXXXXXX</p>
     </div>
 
-    <!-- NOTES -->
-    <div class="card">
-      <h2>Notes</h2>
-      <p id="notes">
-        Python is a high-level programming language.  
-        It is easy to learn and widely used in web development, AI, and data science.
-      </p>
-      <button onclick="markComplete()">Mark as Completed</button>
-    </div>
+    <div class="right">
+      <h3>Payment Options</h3>
+      <p>UPI | Cards | Wallet</p>
 
-    <!-- QUIZ -->
-    <div class="card">
-      <h2>Quiz</h2>
-      <p>What is Python?</p>
-      <button onclick="checkAnswer(true)">Programming Language</button>
-      <button onclick="checkAnswer(false)">Snake</button>
-      <p id="quizResult"></p>
+      <div class="qr">
+        <p>Scan QR</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=payment" />
+      </div>
     </div>
 
   </div>
 
 </div>
 
-<script>
-let tokens = localStorage.getItem("tokens") || 0;
-let progress = localStorage.getItem("progress") || 0;
-
-document.getElementById("tokens").innerText = tokens;
-document.getElementById("progress").innerText = progress + "%";
-
-function login() {
-  let user = document.getElementById("username").value;
-  if(user === "") {
-    alert("Enter name");
-    return;
-  }
-  localStorage.setItem("user", user);
-  document.getElementById("userDisplay").innerText = "Welcome " + user;
-  document.getElementById("loginCard").style.display = "none";
-  document.getElementById("courseSection").style.display = "block";
+<script>function openModal() {
+  document.getElementById("overlay").style.display = "block";
+  document.getElementById("modal").classList.add("show");
 }
 
-function showVideo() {
-  document.getElementById("video").innerHTML = `
-    <iframe src="https://www.youtube.com/embed/rfscVS0vtbw" allowfullscreen></iframe>
-  `;
+function closeModal() {
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("modal").classList.remove("show");
 }
 
-function markComplete() {
-  progress = parseInt(progress) + 30;
-  tokens = parseInt(tokens) + 10;
-
-  localStorage.setItem("progress", progress);
-  localStorage.setItem("tokens", tokens);
-
-  document.getElementById("progress").innerText = progress + "%";
-  document.getElementById("tokens").innerText = tokens;
-}
-
-function checkAnswer(correct) {
-  if(correct) {
-    document.getElementById("quizResult").innerText = "Correct!";
-    tokens = parseInt(tokens) + 20;
-    progress = parseInt(progress) + 20;
-  } else {
-    document.getElementById("quizResult").innerText = "Wrong!";
-  }
-
-  localStorage.setItem("tokens", tokens);
-  localStorage.setItem("progress", progress);
-
-  document.getElementById("tokens").innerText = tokens;
-  document.getElementById("progress").innerText = progress + "%";
-}
-
-// Auto login if already logged in
-window.onload = function() {
-  let user = localStorage.getItem("user");
-  if(user) {
-    document.getElementById("userDisplay").innerText = "Welcome " + user;
-    document.getElementById("loginCard").style.display = "none";
-    document.getElementById("courseSection").style.display = "block";
-  }
-}
-</script>
-
+function openPayment(amount) {
+  document.getElementById("price").innerText = "₹" + amount;
+  document.getElementById("step1").style.display = "none";
+  
+  let payment = document.getElementById("payment");
+  payment.classList.add("show");
+}</script>
 </body>
 </html>
